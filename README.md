@@ -44,9 +44,9 @@ This project is a simple Library Management System built using Flask, providing 
 
 ## Note:
 Ensure that the Flask package is installed in your environment. If it's not already installed, you can install it using:
-```bash
+```
 pip install flask
-
+```
 4. Access the application: Open a browser and navigate to:
     [http:://127.0.0.1:5000](url)
 
@@ -54,7 +54,7 @@ pip install flask
 ## API Endpoints
 ### Books
 #### 1. Get All Books:
-  - **URL:** /books
+ - **URL:** /books
   - **Method:** GET
   - **Query Parameters:**
       - **title** (optional): Filter books by title
