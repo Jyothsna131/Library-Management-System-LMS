@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library management system</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5F5F5;
+            margin: 50;
+            padding: 0;
+            text-align:center
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .input-group input {
+            width: 50%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .input-group input:focus {
+            border-color: #4CAF50;
+        }
+        .login-btn {
+             background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-btn:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Login to Library Management System</h2>
+    <form id="loginForm" onsubmit=Login(event)>
+        <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required />
+        </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit" class="login-btn">Login</button>
+    </form>
+     <div id="errorMessage" class="error-message"></div>
+
+<script>
+    async function Login(event){
+        event.preventDefault();
+        const form=document.getElementById('loginForm');
+        const formData = new FormData(form);
+            const formObject = {};
+            formData.forEach((value, key) => {
+                formObject[key] = value;
+            });
+
+        const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formObject),
+            });
+
+            const responseData = await response.json();
+            console.log(responseData);
+            console.log(responseData.message);
+            if (response.status === 200) {
+                localStorage.setItem("access_token", responseData.access_token);
+
+                // Redirect to the home page
+                await fetchHomePage();
+            } else {
+                 document.getElementById("errorMessage").innerText = responseData.message || "Login failed!"
+            }
+
+    }
+
+    async function fetchHomePage(){
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+            // Redirect to login page if no token is found
+            window.location.href = "/login";
+            return;
+         }
+
+        const response = await fetch('/home', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`  // Include the token in the Authorization header
+        }
+        });
+
+        if (response.status === 200) {
+            const pageContent = await response.text();  // Get the rendered HTML
+
+            // Inject the rendered HTML into the current page (in this case, into the body)
+            document.body.innerHTML = pageContent;
+        } else {
+            document.getElementById("errorMessage").innerText = "Error loading home page!";
+        }
+
+    }
+</script>
+</body>
+</html>
