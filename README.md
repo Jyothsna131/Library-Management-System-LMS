@@ -120,6 +120,22 @@ This project is a simple Library Management System built using Flask, providing 
   - **Response:** Confirmation of the deleted member
 
 # 
+# Automated Test Cases
+The project includes automated test cases to ensure API reliability and correctness. These tests are written using Python's unittest framework and include:
+- **Login Tests:** Verify user authentication.
+- **Books API Tests:** Test CRUD operations for books.
+- **Members API Tests:** Test CRUD operations for members.
+  
+### Running Test Cases
+1. Ensure the virtual environment is activated and dependencies are installed.
+2. Run the test cases using the following command:
+ ```
+   python test_LMS.py
+```
+All tests will execute automatically, and the results will be displayed in the console.
+
+#
+
 # Assumptions and Limitations
 1. **Single User Login:** The current system supports only a single user login with a predefined set of credentials. It does not allow multiple user logins simultaneously.
 2. **No User Account Creation:** The system does not include functionality for creating user accounts. Users are required to use the predefined credentials to log in. There is no registration mechanism in place.
@@ -128,7 +144,14 @@ This project is a simple Library Management System built using Flask, providing 
 5. **Supports Basic Navigation:** The system supports basic navigation between pages after the user logs in. However, there are no advanced features such as sorting, back-navigation or pagination implemented for these sections.
 6. **No Session Expiry:** The application does not implement session expiry. Once the user logs in, the access token remains valid indefinitely unless the user manually logs out or the browser session is cleared. There is no automatic expiration or refresh of the session token.
 
+# 
+# Future Enhancements
+- Add database integration for persistent storage.
+- Implement role-based authentication.
+- Add token expiration and refresh mechanisms.
+- Expand frontend capabilities for better user experience.
 
+#
         
         
       
