@@ -20,6 +20,10 @@ def home():
 #CRUD operations for books
 #Get all the books exists in the memory
 @app.route('/books',methods=['GET'])
+def manage_books():
+    return render_template('books2.html')
+
+@app.route('/books/get',methods=['GET'])
 def get_books():
     title=request.args.get('title')
     author=request.args.get('author')
@@ -40,22 +44,16 @@ def get_books():
     return jsonify({'data':paginated_books}), 200
     #return redirect(url_for('lms'))
 
-@app.route('/books',methods=['POST'])
+@app.route('/books/add',methods=['POST'])
 def add_book():
-    if request.is_json:
-        data=request.get_json()
-        data['id']=len(books)+1
-        books.append(data)
-    else:
-        title= request.form.get('title')
-        author= request.form.get('author')
-        book = {"id": len(books) + 1, "title": title, "author": author}
-        books.append(book)
-    return jsonify({'message':'Book added Successfully','book':data}), 201
+    data=request.get_json()
+    data['id']=len(books)+1
+    books.append(data)
+    return jsonify({'message':'Book added Successfully'}), 201
     #return redirect(url_for('home'))
 
 
-@app.route('/books/<int:book_id>',methods=['PUT'])
+@app.route('/books/update/<int:book_id>',methods=['PUT'])
 def update_book(book_id):
     data=request.get_json()
     for book in books:
@@ -64,7 +62,7 @@ def update_book(book_id):
             return jsonify({'message':'Book updated Successfully','book':book}),200
         return jsonify({'error':'Book not found'}), 404
 
-@app.route('/books/<int:book_id>',methods=['DELETE'])
+@app.route('/books/delete/<int:book_id>',methods=['DELETE'])
 def delete_book(book_id):
     global books
     books=[book for book in books if book['id']!=book_id]
@@ -73,20 +71,24 @@ def delete_book(book_id):
 
 #CRUD for members
 @app.route('/members',methods=['GET'])
+def manage_members():
+    return render_template('members.html')
+
+@app.route('/members/get',methods=['GET'])
 def get_members():
     page=int(request.args.get('page',1))
     limit=int(request.args.get('limit',10))
     paginated_members=paginate(members,page,limit)
     return jsonify({'data':paginated_members}), 200
 
-@app.route('/members',methods=['POST'])
+@app.route('/members/add',methods=['POST'])
 def add_member():
     data=request.get_json()
     data['id']=len(members)+1
     members.append(data)
     return jsonify({'message':'Member added Successfully','member':data}), 201
 
-@app.route('/members/<int:member_id>',methods=['PUT'])
+@app.route('/members/update/<int:member_id>',methods=['PUT'])
 def update_member(member_id):
     data=request.get_json()
     for member in members:
@@ -95,7 +97,7 @@ def update_member(member_id):
             return jsonify({'message':'Member updated Successfully','member':member}), 200
     return jsonify({'error':'Member not found'}), 404
 
-@app.route('/members/<int:member_id>',methods=['DELETE'])
+@app.route('/members/delete/<int:member_id>',methods=['DELETE'])
 def delete_member(member_id):
     global members
     members=[member for member in members if member['id']!=member_id]

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #000057;
+            text-align: center;
+            font-size: 2.5em;
+            margin-top: 20px;
+        }
+
+        h2, h3 {
+            text-align: center;
+            color: #495057;
+        }
+
+        #container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        #options {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #options button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #options button:hover {
+            background-color: #0056b3;
+        }
+
+        #options input[type="text"] {
+            padding: 10px;
+            margin: 10px 5px;
+            width: 70%;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #options input[type="text"]:focus {
+            outline: none;
+            border: 2px solid #80bdff;
+            box-shadow: 0 0 5px rgba(128, 189, 255, 0.5);
+        }
+
+        #options .message {
+            margin-top: 10px;
+            color: green;
+            font-weight: bold;
+        }
+
+        #books-table {
+            width: 75%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        #books-table th, #books-table td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: center;
+        }
+
+        #books-table th {
+            background-color: #343a40;
+            color: white;
+            font-weight: bold;
+        }
+
+        #books-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        #books-table tr:hover {
+            background-color: #e9ecef;
+        }
+
+        #action-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #action-buttons button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #action-buttons button:hover {
+            background-color: #218838;
+        }
+
+        #add-book-form label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+
+        #add-book-form input {
+            width: calc(100% - 24px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #add-book-form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #add-book-form button:hover {
+            background-color: #0056b3;
+        }
+
+        #showSuccessMessage {
+            display: none;
+            color: green;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Manage Books</h1>
+
+        <div id="options">
+            <button onclick="displayInputs()">Add a Book</button><br>
+
+            <div id="add_book" class="hidden">
+                <form id="add-book-form" onsubmit="addBook(event)">
+                    <label for="title">Title:</label>
+                    <input type="text" name="title" id="title" placeholder="Enter Book Title" required>
+
+                    <label for="author">Author:</label>
+                    <input type="text" name="author" id="author" placeholder="Enter Author Name" required>
+                    <br>
+                    <button type="submit">Submit</button>
+
+                    <button type="button" onclick="cancelUpdate()">Cancel</button>
+                    <div id="showSuccessMessage">Book added successfully!</div>
+                </form>
+
+            </div>
+
+            <button onclick="getBooks()">Get Books</button>
+        </div>
+<!--        <input type="text" id="searchInput" placeholder="Search title..."  style="margin:0 100px;">-->
+        <div style="text-align:center; margin-bottom: 20px;">
+    <input type="text" id="search-title" placeholder="Search by title" oninput="searchBooks()">
+    <input type="text" id="search-author" placeholder="Search by author" oninput="searchBooks()">
+    <button onclick="searchBooks()">Search</button>
+</div>
+        <h3 style=" color: #000057;">Books List</h3>
+        <div id="books-container" class="hidden">
+            <table id="books-table">
+                <thead>
+                    <tr>
+                        <th>Book ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically added -->
+                </tbody>
+            </table>
+        </div>
+
+<!--        <div id="action-buttons">-->
+<!--            <button onclick="updateBook()">Update a Book</button>-->
+<!--            <button onclick="deleteBook()">Delete a Book</button>-->
+<!--        </div>-->
+    </div>
+
+    <script>
+        function displayInputs() {
+            const addBookDiv = document.getElementById('add_book');
+            addBookDiv.classList.toggle('hidden');
+        }
+
+        async function addBook(event) {
+            event.preventDefault();
+            const form = document.getElementById('add-book-form');
+            const formData = new FormData(form);
+            const formObject = {};
+            formData.forEach((value, key) => {
+                formObject[key] = value;
+            });
+
+            const response = await fetch('/books/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formObject),
+            });
+
+            const messageDiv = document.getElementById('showSuccessMessage');
+            if (response.status === 201) {
+                messageDiv.style.display = 'block';
+                form.reset();
+            } else {
+                alert('Failed to add book');
+            }
+        }
+
+        async function getBooks() {
+            try {
+                const response = await fetch('/books/get', { method: 'GET' });
+                if (!response.ok) {
+                    alert('Failed to fetch books.');
+                    return;
+                }
+
+                const responseData = await response.json();
+                console.log(responseData); // Debugging to check the format of the response
+
+                const books = responseData.data;
+                const booksContainer = document.getElementById('books-container');
+                const booksTableBody = document.getElementById('books-table').querySelector('tbody');
+
+                booksTableBody.innerHTML = '';
+                books.forEach(book => {
+                    const row = document.createElement('tr');
+
+                    const idCell = document.createElement('td');
+                    idCell.textContent = book.id;
+                    row.appendChild(idCell);
+
+                    const titleCell = document.createElement('td');
+                    titleCell.textContent = book.title;
+                    row.appendChild(titleCell);
+
+                    const authorCell = document.createElement('td');
+                    authorCell.textContent = book.author;
+                    row.appendChild(authorCell);
+
+                    const actionsCell = document.createElement('td');
+                    actionsCell.innerHTML = `
+                        <button onclick="updateBook(${book.id})">Update</button>
+                        <button onclick="deleteBook(${book.id})">Delete</button>
+                    `;
+                    row.appendChild(actionsCell);
+
+                    booksTableBody.appendChild(row);
+                });
+
+                booksContainer.classList.remove('hidden');
+            } catch (error) {
+                alert('An error occurred while fetching books.');
+            }
+        }
+
+        async function searchBooks() {
+    const title = document.getElementById('search-title').value;
+    const author = document.getElementById('search-author').value;
+
+    let url = '/books/get?';
+    if (title) {
+        url += `title=${title}&`;
+    }
+    if (author) {
+        url += `author=${author}&`;
+    }
+
+    try {
+        const response = await fetch(url, { method: 'GET' });
+        if (!response.ok) {
+            alert('Failed to fetch books.');
+            return;
+        }
+
+        const responseData = await response.json();
+        displayBooks(responseData.data); // Update this to match how you display books
+    } catch (error) {
+        alert('An error occurred while searching for books.');
+    }
+}
+
+function displayBooks(books) {
+    const booksTableBody = document.getElementById('books-table').querySelector('tbody');
+    booksTableBody.innerHTML = ''; // Clear existing books
+
+    books.forEach(book => {
+        const row = document.createElement('tr');
+
+        const idCell = document.createElement('td');
+        idCell.textContent = book.id;
+        row.appendChild(idCell);
+
+        const titleCell = document.createElement('td');
+        titleCell.textContent = book.title;
+        row.appendChild(titleCell);
+
+        const authorCell = document.createElement('td');
+        authorCell.textContent = book.author;
+        row.appendChild(authorCell);
+
+        const actionsCell = document.createElement('td');
+
+        const updateButton = document.createElement('button');
+        updateButton.textContent = 'Update';
+        updateButton.onclick = () => updateBook(book.id);
+        updateButton.classList.add('btn', 'btn-primary');
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteBook(book.id);
+        deleteButton.classList.add('btn', 'btn-danger');
+
+        actionsCell.appendChild(updateButton);
+        actionsCell.appendChild(deleteButton);
+        row.appendChild(actionsCell);
+
+        booksTableBody.appendChild(row);
+    });
+}
+
+
+        async function updateBook(bookId) {
+            const newTitle = prompt('Enter the new Title:');
+            const newAuthor = prompt('Enter the new Author:');
+            if (!newTitle || !newAuthor) {
+                alert('Title and Author are required!');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/books/update/${bookId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ title: newTitle, author: newAuthor }),
+                });
+
+                if (response.ok) {
+                    alert('Book updated successfully!');
+                    getBooks(); // Refresh the book list
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to update book.');
+                }
+            } catch (error) {
+                console.error('Error updating book:', error);
+            }
+        }
+    function cancelUpdate() {
+    const updateForm = document.getElementById('add-book-form');
+    updateForm.reset();  // Reset the input fields
+    // Optionally hide or close the form
+    updateForm.style.display = 'none';  // Hide the update form
+}
+
+        async function deleteBook(bookId) {
+            try {
+                const response = await fetch(`/books/delete/${bookId}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    alert('Book deleted successfully!');
+                    getBooks(); // Refresh the book list
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to delete book.');
+                }
+            } catch (error) {
+                console.error('Error deleting book:', error);
+            }
+        }
+    </script>
+</body>
+</html>

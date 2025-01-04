@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books Management</title>
+    <style>
+        body {
+            background-color: #F5F5F5;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: maroon;
+            text-align: center;
+            font-size: 200%;
+            margin-top: 50px;
+        }
+        nav {
+            text-align: center;
+            margin-top: 20px;
+        }
+        nav a {
+            margin: 0 15px;
+            font-size: 120%;
+            color: dark blue;
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        section {
+            text-align: center;
+            margin-top: 30px;
+        }
+         button {
+          background-color: #F5F5F5;
+          border: 2px solid maroon;
+          color: maroon;
+          padding: 15px 32px;
+          border-radius: 4px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          transition-duration: 0.4s;
+        }
+        button:hover {
+              background-color: maroon; /* Green */
+              color: white;
+        }
+        button[id=add-book],button[id={
+            background-color: #F5F5F5;
+          border: 2px solid maroon;
+          color: maroon;
+          padding: 10px 32px;
+          border-radius: 4px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 15px;
+          transition-duration: 0.4s;
+          width: 30%
+        }
+         button[id=add-book]:hover {
+              background-color: maroon; /* Green */
+              color: white;
+        }
+      input[type=text]{
+                  width: 50%;
+                  padding: 12px 20px;
+                  margin: 8px 0;
+                  box-sizing: border-box;
+                  border-radius: 4px;
+        }
+        div[class=col-25] {
+          float: left;
+          width: 25%;
+          margin-top: 6px;
+        }
+
+        div[class=col-75] {
+          float: right;
+          width: 75%;
+          margin-top: 6px;
+        }
+        label {
+          padding: 12px 12px 12px 0px;
+          display: inline-block;
+        }
+
+    #container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+    }
+
+    #options {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #options button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 10px 5px;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    #options button:hover {
+        background-color: #0056b3;
+    }
+
+    #options input[type="text"] {
+        padding: 10px;
+        margin: 10px 5px;
+        width: 200px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+    }
+
+    #options input[type="text"]:focus {
+        outline: none;
+        border: 2px solid #80bdff;
+    }
+
+    #options .message {
+        margin-top: 10px;
+        color: green;
+        font-weight: bold;
+    }
+
+    #books-table {
+        width: 75%;
+        margin: 20px auto;
+        border-collapse: collapse;
+    }
+
+    #books-table th, #books-table td {
+        border: 1px solid #dee2e6;
+        padding: 12px;
+        text-align: center;
+    }
+
+    #books-table th {
+        background-color: #343a40;
+        color: white;
+        font-weight: bold;
+    }
+
+    #books-table tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    #books-table tr:hover {
+        background-color: #e9ecef;
+    }
+
+    #action-buttons {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    #action-buttons button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    #action-buttons button:hover {
+        background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>Library Management System</h1>
+    <div id="options">
+      <button>Add a Book</button><br>
+      <label for="title">Title:</label>
+      <input type="text" id="title" placeholder="Enter Book Title"><br>
+      <label for="author">Author:</label>
+      <input type="text" id="author" placeholder="Enter Author Name"><br>
+      <button>Submit</button>
+      <div class="message">Book added successfully!</div>
+      <button>Get Books</button>
+    </div>
+
+    <h2 style="text-align: center;">Books List</h2>
+    <table id="books-table">
+      <thead>
+        <tr>
+          <th>Book ID</th>
+          <th>Title</th>
+          <th>Author</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Think and Grow Rich</td>
+          <td>Napoleon Hill</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="action-buttons">
+      <button>Update a Book</button>
+      <button>Delete a Book</button>
+    </div>
+  </div>
+</body>
+</html>
+
+  #books-container {
+      margin: 20px auto;
+      width: 80%;
+  }
+
+  #books-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+  }
+
+  #books-table th, #books-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+  }
+
+  #books-table th {
+      background-color: #f4f4f4;
+      color: #333;
+      font-weight: bold;
+  }
+
+  #books-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+  }
+
+  #books-table tr:hover {
+      background-color: #f1f1f1;
+  }
+
+  #options {
+      text-align: center;
+      margin-bottom: 20px;
+  }
+
+  #options button {
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  #options button:hover {
+      background-color: #c9302c;
+  }
+
+  #options input[type="text"] {
+      padding: 8px;
+      margin: 5px;
+      width: 200px;
+  }
+
+  #options input[type="text"]:focus {
+      outline: none;
+      border: 2px solid #5bc0de;
+  }
+
+  #options .message {
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+  }
+
+
+    </style>
+</head>
+<body>
+    <h1>Books Management</h1>
+
+    <section>
+        <h2>Options</h2>
+
+        <button onclick="displayInputs()">Add a Book</button>
+        <div id="add_book" style="display:none;">
+
+
+            <form id = "add-book-form" onsubmit="addBook(event)">
+                <div class="col-25">
+                    <label>Title: </label>
+                </div>
+                <div class="col-75">
+                    <input type="text" name="title" placeholder="Enter Title of the Book" required>
+                </div>
+                <div class="col-25">
+                    <label>Author: </label>
+                </div>
+                <div class="col-75">
+                    <input type="text" name="author" placeholder="Enter Author of the Book" required>
+                </div>
+                <div>
+                    <button id="add-book" type="submit">Submit</button>
+                    <div id="showSuccessMessage" style="display:none">Book added successfully!!</div>
+                </div>
+            </form>
+        </div><br><br>
+
+        <button onclick="getBooks()">Get Books</button>
+        <div id="books-container" style="margin-top: 20px; display: none;">
+            <h3>Books List</h3>
+            <table id="books-table" border="1" style="border-collapse: collapse; width: 75%;">
+                <thead>
+                    <tr>
+                        <th>Book ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                     </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be added dynamically -->
+                </tbody>
+    </table>
+</div>
+
+
+<!--        <form action="/books/get" method="GET">-->
+<!--            <button type="submit">GetBooks</button><br><br>-->
+<!--        </form>-->
+
+        <form action="/books/update" method="PUT">
+            <button type="submit">Update a Book</button><br><br>
+        </form>
+
+        <form action="/books/delete" method="DELETE">
+            <button type="submit">Delete a Book</button><br><br>
+        </form>
+    <script>
+
+        function displayInputs(){
+            document.getElementById('add_book').style.display = 'block';
+        }
+
+        function addMessage(){
+            document.getElementById('showMessage').style.display = 'block';
+        }
+
+        async function addBook(event)
+        {
+            event.preventDefault();
+            const form = document.getElementById('add-book-form');
+            const formData = new FormData(form);
+             const formObject = {};
+                formData.forEach((value, key) => {
+                    formObject[key] = value;
+                });
+                const response = await fetch('/books/add', {method:'POST',
+                headers:{
+                'Content-Type':'application/json'
+                },
+                body:JSON.stringify(formObject)});
+
+                const data = await response.json();
+                const messageDiv = document.getElementById('showSuccessMessage');
+                if(response.status === 201)
+                {
+                    messageDiv.style = 'block';
+                }
+        }
+
+    async function getBooks() {
+    try {
+        const response = await fetch('/books/get', { method: 'GET' });
+
+        if (!response.ok) {
+            console.error(`Error: ${response.status} - ${response.statusText}`);
+            alert('Failed to fetch books.');
+            return;
+        }
+
+        const responseData = await response.json();
+        const books = responseData.data; // Access the `data` array
+
+        const booksContainer = document.getElementById('books-container');
+        const booksTableBody = document.getElementById('books-table').querySelector('tbody');
+
+        // Clear previous data
+        booksTableBody.innerHTML = '';
+
+        // Populate table with books
+        books.forEach(book => {
+            const row = document.createElement('tr');
+
+            // Add Book ID cell
+            const idCell = document.createElement('td');
+            idCell.textContent = book.id; // Adjust to match the field name `id`
+            row.appendChild(idCell);
+
+            // Add Title cell
+            const titleCell = document.createElement('td');
+            titleCell.textContent = book.title;
+            row.appendChild(titleCell);
+
+            // Add Author cell
+            const authorCell = document.createElement('td');
+            authorCell.textContent = book.author;
+            row.appendChild(authorCell);
+
+            booksTableBody.appendChild(row);
+        });
+
+        // Show the container
+        booksContainer.style.display = 'block';
+    } catch (error) {
+        console.error('Error fetching books:', error);
+        alert('An error occurred while fetching books.');
+    }
+}
+
+
+
+</script>
+    </section>
+
+</body>
+</html>
